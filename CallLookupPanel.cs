@@ -12,6 +12,9 @@ namespace W6OP
         private readonly PrefixFileParser _PrefixFileParser;
         private CallLookUp _CallLookUp;
 
+        public string QRZLogonId;
+        public string QRZPassword;
+
         public CallLookupPanel()
         {
             InitializeComponent();
