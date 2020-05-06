@@ -14,12 +14,12 @@ namespace W6OP
         [DisplayName("QRZ.com Logon Id")]
         [Description("Enter your QRZ logon id")]
         [DefaultValue("")]
-        public string QRZLogonId { get; set; } = "";
+        public string QRZLogonId { get; set; }
 
         // later need to encrypt before saving
         [DisplayName("QRZ.com Password")]
         [Description("Enter your QRZ password")]
         [DefaultValue("")]
-        public string QRZPassword { get; set; } = "";
+        public string QRZPassword { get; set; }
     }
 }

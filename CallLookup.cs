@@ -6,12 +6,16 @@ using System.Windows.Forms;
 namespace W6OP
 {
     [Export(typeof(IPlugin))]
-    public class CallLookup : IPlugin, IDisposable
+    [Export(typeof(IVisualPlugin))]
+    public class CallLookup : IPlugin, IDisposable, IVisualPlugin
     {
-
-        private CallLookupPanel lookup = new CallLookupPanel();
+        private CallLookupPanel lookupPanel;
         private Settings settings = new Settings();
-       
+
+        private CallLookup()
+        {
+           
+        }
 
         #region iPlugin Implementation
 
@@ -22,31 +26,31 @@ namespace W6OP
         private bool enabled;
         public bool Enabled { get => enabled; set => enabled = value; }
 
-        public object Settings { get => GetSettings(); set => ApplySettings(value as Settings); }
-
-        private void ApplySettings(Settings settings)
-        {
-            lookup.QRZLogonId = settings.QRZLogonId.ToUpper();
-            lookup.QRZPassword = settings.QRZPassword;
-           
-        }
-
-        private object GetSettings()
-        {
-            settings.QRZLogonId = lookup.QRZLogonId;
-            settings.QRZPassword = lookup.QRZPassword;
-            return settings;
-        }
+        public object Settings { get => settings; set => settings = (value as Settings); }
 
         public ToolStrip ToolStrip => null;
 
         public ToolStripItem StatusItem => null;
+
+        public bool CanCreatePanel => true;
 
         #endregion
 
         public void Dispose()
         {
             //throw new NotImplementedException();
+        }
+
+        public UserControl CreatePanel()
+        {
+            lookupPanel = new CallLookupPanel { Name = "Call Lookup" };
+            return lookupPanel;
+        }
+
+        public void DestroyPanel(UserControl panel)
+        {
+            lookupPanel.Dispose();
+            lookupPanel = null;
         }
     }// end class
    

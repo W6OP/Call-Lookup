@@ -10,10 +10,11 @@ namespace W6OP
     public partial class CallLookupPanel : UserControl
     {
         private readonly PrefixFileParser _PrefixFileParser;
-        private CallLookUp _CallLookUp;
+        private CallLookUp CallLookUp;
 
-        public string QRZLogonId;
-        public string QRZPassword;
+        // these must be initialized or GetSettings() fails
+        public string QRZLogonId = "";
+        public string QRZPassword = "";
 
         public CallLookupPanel()
         {
@@ -22,16 +23,38 @@ namespace W6OP
             _PrefixFileParser = new PrefixFileParser();
             _PrefixFileParser.ParsePrefixFile("");
 
-            _CallLookUp = new CallLookUp(_PrefixFileParser);
+            CallLookUp = new CallLookUp(_PrefixFileParser);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+
+        private void CallLookupPanel_Load(object sender, EventArgs e)
         {
+            //Settings settings = CallLookup.Se;
+            //TextBoxCallSign.Text = settings.QRZLogonId;
+            //TextBoxQRZPassword.Text = settings.QRZPassword;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonCallLookup_Click(object sender, EventArgs e)
+        {
+            IEnumerable<CallSignInfo> hitCollection;
+
             ListViewResults.Items.Clear();
 
             if (TextBoxCallSign.Text != "")
             {
-                IEnumerable<CallSignInfo> hitCollection = _CallLookUp.LookUpCall(TextBoxCallSign.Text);
+                if (CheckBoxQRZ.Checked)
+                {
+                     hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text, TextBoxQRZuserId.Text, TextBoxQRZPassword.Text);
+                }
+                else
+                {
+                     hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text);
+                }
 
                 if (hitCollection != null)
                 {
@@ -82,12 +105,105 @@ namespace W6OP
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextBoxCallSign_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if(!CheckBoxQRZ.Checked)
             {
-                button1_Click(this, new EventArgs());
+                if (e.KeyCode == Keys.Enter)
+                {
+                    ButtonCallLookup_Click(this, new EventArgs());
+                }
+            }
+            else
+            {
+                if (TextBoxCallSign.Text.Length > 2)
+                {
+                    if (e.KeyCode == Keys.Enter)
+                    {
+                        ButtonCallLookup_Click(this, new EventArgs());
+                    }
+                }
             }
         }
+
+        #region QRZ
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxQRZuserId_Enter(object sender, EventArgs e)
+        {
+            if (TextBoxQRZuserId.Text == "")
+            {
+                TextBoxQRZuserId.Text = "QRZ User Id";
+                TextBoxQRZuserId.ForeColor = Color.Gray;
+            }
+            else
+            {
+                TextBoxQRZuserId.Text = "";
+                TextBoxQRZuserId.ForeColor = Color.Black;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxQRZPassword_Enter(object sender, EventArgs e)
+        {
+
+            if (TextBoxQRZPassword.Text == "")
+            {
+                TextBoxQRZPassword.PasswordChar = '\0';
+                TextBoxQRZPassword.Text = "QRZ Password";
+                TextBoxQRZPassword.ForeColor = Color.Gray;
+            }
+            else
+            {
+                TextBoxQRZPassword.PasswordChar = '*';
+                TextBoxQRZPassword.Text = "";
+                TextBoxQRZPassword.ForeColor = Color.Black;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxQRZuserId_Leave(object sender, EventArgs e)
+        {
+            if (TextBoxQRZuserId.Text == "")
+            {
+                TextBoxQRZuserId.Text = "QRZ User Id";
+                TextBoxQRZuserId.ForeColor = Color.Gray;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxQRZPassword_Leave(object sender, EventArgs e)
+        {
+            if (TextBoxQRZPassword.Text == "")
+            {
+                TextBoxQRZPassword.PasswordChar = '\0';
+                TextBoxQRZPassword.Text = "QRZ Password";
+                TextBoxQRZPassword.ForeColor = Color.Gray;
+            }
+        }
+
+        #endregion
+
     } // end class
 }

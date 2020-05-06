@@ -37,22 +37,25 @@
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.CheckBoxQRZ = new System.Windows.Forms.CheckBox();
+            this.TextBoxQRZPassword = new System.Windows.Forms.TextBox();
+            this.TextBoxQRZuserId = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // ButtonLookupCall
             // 
-            this.ButtonLookupCall.Location = new System.Drawing.Point(0, 6);
+            this.ButtonLookupCall.Location = new System.Drawing.Point(13, 6);
             this.ButtonLookupCall.Name = "ButtonLookupCall";
             this.ButtonLookupCall.Size = new System.Drawing.Size(75, 23);
             this.ButtonLookupCall.TabIndex = 0;
             this.ButtonLookupCall.Text = "Lookup Call";
             this.ButtonLookupCall.UseVisualStyleBackColor = true;
-            this.ButtonLookupCall.Click += new System.EventHandler(this.button1_Click);
+            this.ButtonLookupCall.Click += new System.EventHandler(this.ButtonCallLookup_Click);
             // 
             // TextBoxCallSign
             // 
             this.TextBoxCallSign.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.TextBoxCallSign.Location = new System.Drawing.Point(81, 8);
+            this.TextBoxCallSign.Location = new System.Drawing.Point(94, 8);
             this.TextBoxCallSign.Name = "TextBoxCallSign";
             this.TextBoxCallSign.Size = new System.Drawing.Size(135, 20);
             this.TextBoxCallSign.TabIndex = 1;
@@ -70,7 +73,7 @@
             this.columnHeader6});
             this.ListViewResults.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ListViewResults.HideSelection = false;
-            this.ListViewResults.Location = new System.Drawing.Point(0, 41);
+            this.ListViewResults.Location = new System.Drawing.Point(0, 62);
             this.ListViewResults.Name = "ListViewResults";
             this.ListViewResults.Size = new System.Drawing.Size(647, 202);
             this.ListViewResults.TabIndex = 13;
@@ -106,16 +109,48 @@
             this.columnHeader6.Text = "Call Sign Flags";
             this.columnHeader6.Width = 150;
             // 
+            // CheckBoxQRZ
+            // 
+            this.CheckBoxQRZ.AutoSize = true;
+            this.CheckBoxQRZ.Location = new System.Drawing.Point(247, 10);
+            this.CheckBoxQRZ.Name = "CheckBoxQRZ";
+            this.CheckBoxQRZ.Size = new System.Drawing.Size(88, 17);
+            this.CheckBoxQRZ.TabIndex = 22;
+            this.CheckBoxQRZ.Text = "QRZ Lookup";
+            this.CheckBoxQRZ.UseVisualStyleBackColor = true;
+            // 
+            // TextBoxQRZPassword
+            // 
+            this.TextBoxQRZPassword.Location = new System.Drawing.Point(247, 36);
+            this.TextBoxQRZPassword.Name = "TextBoxQRZPassword";
+            this.TextBoxQRZPassword.Size = new System.Drawing.Size(205, 20);
+            this.TextBoxQRZPassword.TabIndex = 25;
+            this.TextBoxQRZPassword.Enter += new System.EventHandler(this.TextBoxQRZPassword_Enter);
+            this.TextBoxQRZPassword.Leave += new System.EventHandler(this.TextBoxQRZPassword_Leave);
+            // 
+            // TextBoxQRZuserId
+            // 
+            this.TextBoxQRZuserId.Location = new System.Drawing.Point(13, 36);
+            this.TextBoxQRZuserId.Name = "TextBoxQRZuserId";
+            this.TextBoxQRZuserId.Size = new System.Drawing.Size(228, 20);
+            this.TextBoxQRZuserId.TabIndex = 24;
+            this.TextBoxQRZuserId.Enter += new System.EventHandler(this.TextBoxQRZuserId_Enter);
+            this.TextBoxQRZuserId.Leave += new System.EventHandler(this.TextBoxQRZuserId_Leave);
+            // 
             // CallLookupPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.TextBoxQRZPassword);
+            this.Controls.Add(this.TextBoxQRZuserId);
+            this.Controls.Add(this.CheckBoxQRZ);
             this.Controls.Add(this.ListViewResults);
             this.Controls.Add(this.TextBoxCallSign);
             this.Controls.Add(this.ButtonLookupCall);
             this.Name = "CallLookupPanel";
-            this.Size = new System.Drawing.Size(647, 243);
-            this.VisibleChanged += new System.EventHandler(this.button1_Click);
+            this.Size = new System.Drawing.Size(647, 264);
+            this.Load += new System.EventHandler(this.CallLookupPanel_Load);
+            this.VisibleChanged += new System.EventHandler(this.ButtonCallLookup_Click);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -132,5 +167,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.CheckBox CheckBoxQRZ;
+        private System.Windows.Forms.TextBox TextBoxQRZPassword;
+        private System.Windows.Forms.TextBox TextBoxQRZuserId;
     }
 }
