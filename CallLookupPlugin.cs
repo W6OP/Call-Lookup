@@ -12,11 +12,7 @@ namespace W6OP
         private CallLookupPanel lookupPanel;
         private Settings settings = new Settings();
 
-        private CallLookupPlugin()
-        {
-           
-        }
-
+       
         #region iPlugin Implementation
 
         public string Name => "Call Lookup";
@@ -26,7 +22,22 @@ namespace W6OP
         private bool enabled;
         public bool Enabled { get => enabled; set => enabled = value; }
 
-        public object Settings { get => settings; set => settings = (value as Settings); }
+        // public object Settings { get => settings; set => settings = (value as Settings); }
+        public object Settings { get => GetSettings(); set => ApplySettings(value as Settings); }
+
+        public object GetSettings()
+        {
+            lookupPanel.QRZLogonId = settings.QRZLogonId;
+            lookupPanel.QRZPassword = settings.QRZPassword;
+            return settings;
+        }
+
+        public void ApplySettings(Settings value)
+        {
+            settings.QRZLogonId = value.QRZLogonId;
+            settings.QRZPassword = value.QRZPassword;
+            //settings = value;
+        }
 
         public ToolStrip ToolStrip => null;
 
