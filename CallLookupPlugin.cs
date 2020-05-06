@@ -10,7 +10,7 @@ namespace W6OP
     public class CallLookupPlugin : IPlugin, IDisposable, IVisualPlugin
     {
         private CallLookupPanel lookupPanel;
-        private Settings settings = new Settings();
+        public Settings settings = new Settings();
 
        
         #region iPlugin Implementation
@@ -27,16 +27,16 @@ namespace W6OP
 
         public object GetSettings()
         {
-            lookupPanel.QRZLogonId = settings.QRZLogonId;
-            lookupPanel.QRZPassword = settings.QRZPassword;
+            //settings.QRZLogonId = lookupPanel.QRZLogonId;
+            //settings.QRZPassword = lookupPanel.QRZPassword;
             return settings;
         }
 
         public void ApplySettings(Settings value)
         {
-            settings.QRZLogonId = value.QRZLogonId;
-            settings.QRZPassword = value.QRZPassword;
-            //settings = value;
+            //lookupPanel.QRZLogonId = value.QRZLogonId;
+            //lookupPanel.QRZPassword = value.QRZPassword;
+            settings = value;
         }
 
         public ToolStrip ToolStrip => null;
