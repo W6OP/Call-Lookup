@@ -9,8 +9,12 @@ namespace W6OP
 {
     public partial class CallLookupPanel : UserControl
     {
-        private readonly PrefixFileParser _PrefixFileParser;
+        // prefix file parser and call lookup class instances
+        private readonly PrefixFileParser PrefixFileParser;
         private CallLookUp CallLookUp;
+       
+        // plugin instance
+        public CallLookupPlugin Plugin;
 
         // these must be initialized or GetSettings() fails
         public string QRZLogonId = "";
@@ -20,16 +24,15 @@ namespace W6OP
         {
             InitializeComponent();
 
-            _PrefixFileParser = new PrefixFileParser();
-            _PrefixFileParser.ParsePrefixFile("");
-
-            CallLookUp = new CallLookUp(_PrefixFileParser);
+            PrefixFileParser = new PrefixFileParser();
+            PrefixFileParser.ParsePrefixFile("");
+            CallLookUp = new CallLookUp(PrefixFileParser); 
         }
 
 
         private void CallLookupPanel_Load(object sender, EventArgs e)
         {
-            //Settings settings = CallLookup.Se;
+            var settings = Plugin.Settings;
             //TextBoxCallSign.Text = settings.QRZLogonId;
             //TextBoxQRZPassword.Text = settings.QRZPassword;
         }

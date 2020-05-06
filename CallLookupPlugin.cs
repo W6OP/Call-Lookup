@@ -7,12 +7,12 @@ namespace W6OP
 {
     [Export(typeof(IPlugin))]
     [Export(typeof(IVisualPlugin))]
-    public class CallLookup : IPlugin, IDisposable, IVisualPlugin
+    public class CallLookupPlugin : IPlugin, IDisposable, IVisualPlugin
     {
         private CallLookupPanel lookupPanel;
         private Settings settings = new Settings();
 
-        private CallLookup()
+        private CallLookupPlugin()
         {
            
         }
@@ -44,6 +44,7 @@ namespace W6OP
         public UserControl CreatePanel()
         {
             lookupPanel = new CallLookupPanel { Name = "Call Lookup" };
+            lookupPanel.Plugin = this;
             return lookupPanel;
         }
 
