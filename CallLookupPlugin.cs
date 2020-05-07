@@ -10,7 +10,7 @@ namespace W6OP
     public class CallLookupPlugin : IPlugin, IDisposable, IVisualPlugin
     {
         private CallLookupPanel lookupPanel;
-        public Settings settings = new Settings();
+        private Settings settings = new Settings();
 
        
         #region iPlugin Implementation

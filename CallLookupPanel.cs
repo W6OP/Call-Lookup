@@ -12,6 +12,7 @@ namespace W6OP
         // prefix file parser and call lookup class instances
         private readonly PrefixFileParser PrefixFileParser;
         private CallLookUp CallLookUp;
+        Settings settings;
        
         // plugin instance
         public CallLookupPlugin Plugin;
@@ -32,9 +33,9 @@ namespace W6OP
 
         private void CallLookupPanel_Load(object sender, EventArgs e)
         {
-            var settings = Plugin.Settings;
-            //TextBoxCallSign.Text = settings.QRZLogonId;
-            //TextBoxQRZPassword.Text = settings.QRZPassword;
+            settings = (Settings)Plugin.Settings;
+            TextBoxQRZuserId.Text = settings.QRZLogonId;
+            TextBoxQRZPassword.Text = settings.QRZPassword;
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace W6OP
             {
                 if (CheckBoxQRZ.Checked)
                 {
-                     hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text, TextBoxQRZuserId.Text, TextBoxQRZPassword.Text);
+                     hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text, settings.QRZLogonId, settings.QRZPassword);
                 }
                 else
                 {
