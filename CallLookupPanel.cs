@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using W6OP.CallParser;
 
@@ -34,8 +35,17 @@ namespace W6OP
         private void CallLookupPanel_Load(object sender, EventArgs e)
         {
             settings = (Settings)Plugin.Settings;
-            TextBoxQRZuserId.Text = settings.QRZLogonId;
-            TextBoxQRZPassword.Text = settings.QRZPassword;
+            TextBoxCallSign.Focus();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Enter)
+            {
+                ButtonLookupCall.PerformClick();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         /// <summary>
@@ -53,7 +63,15 @@ namespace W6OP
             {
                 if (CheckBoxQRZ.Checked)
                 {
-                     hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text, settings.QRZLogonId, settings.QRZPassword);
+                    if (!string.IsNullOrEmpty(settings.QRZLogonId) && !string.IsNullOrEmpty(settings.QRZLogonId))
+                    {
+                        hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text, settings.QRZLogonId, settings.QRZPassword);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please go to Plugin Settings and add your QRZ.com credentials", "Missing Credentials", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
                 }
                 else
                 {
@@ -86,19 +104,19 @@ namespace W6OP
                 if (kind == PrefixKind.DXCC)
                 {
                     item = new ListViewItem(call);
-                    item.BackColor = Color.Honeydew;
+                    item.BackColor = Color.Thistle;
                 }
                 else
                 {
-                    item = new ListViewItem("--- " + call);
-                    item.BackColor = Color.LightGray;
+                    item = new ListViewItem(call);
+                    item.BackColor = Color.LavenderBlush;
                 }
 
                 item.SubItems.Add(kind.ToString());
                 item.SubItems.Add(country);
                 item.SubItems.Add(province ?? "");
                 item.SubItems.Add(dxcc);
-                item.SubItems.Add(flags);
+                //item.SubItems.Add(flags);
                 ListViewResults.Items.Add(item);
                 Application.DoEvents();
             }
@@ -134,80 +152,6 @@ namespace W6OP
                 }
             }
         }
-
-        #region QRZ
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TextBoxQRZuserId_Enter(object sender, EventArgs e)
-        {
-            if (TextBoxQRZuserId.Text == "")
-            {
-                TextBoxQRZuserId.Text = "QRZ User Id";
-                TextBoxQRZuserId.ForeColor = Color.Gray;
-            }
-            else
-            {
-                TextBoxQRZuserId.Text = "";
-                TextBoxQRZuserId.ForeColor = Color.Black;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TextBoxQRZPassword_Enter(object sender, EventArgs e)
-        {
-
-            if (TextBoxQRZPassword.Text == "")
-            {
-                TextBoxQRZPassword.PasswordChar = '\0';
-                TextBoxQRZPassword.Text = "QRZ Password";
-                TextBoxQRZPassword.ForeColor = Color.Gray;
-            }
-            else
-            {
-                TextBoxQRZPassword.PasswordChar = '*';
-                TextBoxQRZPassword.Text = "";
-                TextBoxQRZPassword.ForeColor = Color.Black;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TextBoxQRZuserId_Leave(object sender, EventArgs e)
-        {
-            if (TextBoxQRZuserId.Text == "")
-            {
-                TextBoxQRZuserId.Text = "QRZ User Id";
-                TextBoxQRZuserId.ForeColor = Color.Gray;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TextBoxQRZPassword_Leave(object sender, EventArgs e)
-        {
-            if (TextBoxQRZPassword.Text == "")
-            {
-                TextBoxQRZPassword.PasswordChar = '\0';
-                TextBoxQRZPassword.Text = "QRZ Password";
-                TextBoxQRZPassword.ForeColor = Color.Gray;
-            }
-        }
-
-        #endregion
 
     } // end class
 }

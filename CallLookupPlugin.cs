@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using VE3NEA.HamCockpit.PluginAPI;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace W6OP
 {
@@ -12,10 +13,9 @@ namespace W6OP
         private CallLookupPanel lookupPanel;
         private Settings settings = new Settings();
 
-       
         #region iPlugin Implementation
 
-        public string Name => "Call Lookup";
+        public string Name => "W6OP Call Lookup";
 
         public string Author => "W6OP";
 
@@ -27,15 +27,11 @@ namespace W6OP
 
         public object GetSettings()
         {
-            //settings.QRZLogonId = lookupPanel.QRZLogonId;
-            //settings.QRZPassword = lookupPanel.QRZPassword;
             return settings;
         }
 
         public void ApplySettings(Settings value)
         {
-            //lookupPanel.QRZLogonId = value.QRZLogonId;
-            //lookupPanel.QRZPassword = value.QRZPassword;
             settings = value;
         }
 
@@ -54,7 +50,7 @@ namespace W6OP
 
         public UserControl CreatePanel()
         {
-            lookupPanel = new CallLookupPanel { Name = "Call Lookup" };
+            lookupPanel = new CallLookupPanel { Name = GetTitleAndVersion() };
             lookupPanel.Plugin = this;
             return lookupPanel;
         }
@@ -63,6 +59,15 @@ namespace W6OP
         {
             lookupPanel.Dispose();
             lookupPanel = null;
+        }
+
+        private string GetTitleAndVersion()
+        {
+            // get the version number
+            Assembly asm = Assembly.GetExecutingAssembly();
+            AssemblyName an = asm.GetName();
+            string version = an.Version.Major + "." + an.Version.Minor + "." + an.Version.Build + "." + an.Version.Revision;
+            return "Call Lookup (" + version + ")";
         }
     }// end class
    
