@@ -59,35 +59,43 @@ namespace W6OP
 
             ListViewResults.Items.Clear();
 
-            if (TextBoxCallSign.Text != "")
+            try
             {
-                if (CheckBoxQRZ.Checked)
+                if (TextBoxCallSign.Text != "")
                 {
-                    if (!string.IsNullOrEmpty(settings.QRZLogonId) && !string.IsNullOrEmpty(settings.QRZLogonId))
+                    if (CheckBoxQRZ.Checked)
                     {
-                        hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text, settings.QRZLogonId, settings.QRZPassword);
+                        if (!string.IsNullOrEmpty(settings.QRZLogonId) && !string.IsNullOrEmpty(settings.QRZLogonId))
+                        {
+                            hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text, settings.QRZLogonId, settings.QRZPassword);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Please go to Plugin Settings and add your QRZ.com credentials", "Missing Credentials", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            return;
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Please go to Plugin Settings and add your QRZ.com credentials", "Missing Credentials", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        return;
+                        hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text);
                     }
-                }
-                else
-                {
-                     hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text);
-                }
 
-                if (hitCollection != null)
-                {
-                    var hitList = hitCollection.ToList();
-                    foreach (CallSignInfo hit in hitList)
+                    if (hitCollection != null)
                     {
-                        var flags = string.Join(",", hit.CallSignFlags);
-                        UpdateListViewResults(hit.CallSign, hit.Kind, hit.Country, hit.Province, hit.DXCC.ToString(), flags);
+                        var hitList = hitCollection.ToList();
+                        foreach (CallSignInfo hit in hitList)
+                        {
+                            var flags = string.Join(",", hit.CallSignFlags);
+                            UpdateListViewResults(hit.CallSign, hit.Kind, hit.Country, hit.Province, hit.DXCC.ToString(), flags);
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "An Error Occurred", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+     
         }
 
         /// <summary>
