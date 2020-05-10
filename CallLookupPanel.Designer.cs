@@ -36,15 +36,16 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ColumnQRZ = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.CheckBoxQRZ = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // ButtonLookupCall
             // 
-            this.ButtonLookupCall.Location = new System.Drawing.Point(197, 16);
+            this.ButtonLookupCall.Location = new System.Drawing.Point(279, 16);
             this.ButtonLookupCall.Name = "ButtonLookupCall";
             this.ButtonLookupCall.Size = new System.Drawing.Size(87, 23);
-            this.ButtonLookupCall.TabIndex = 1;
+            this.ButtonLookupCall.TabIndex = 2;
             this.ButtonLookupCall.Text = "Lookup Call";
             this.ButtonLookupCall.UseVisualStyleBackColor = true;
             this.ButtonLookupCall.Click += new System.EventHandler(this.ButtonCallLookup_Click);
@@ -60,22 +61,26 @@
             // 
             // ListViewResults
             // 
-            this.ListViewResults.BackColor = System.Drawing.Color.Ivory;
+            this.ListViewResults.BackColor = System.Drawing.Color.AliceBlue;
             this.ListViewResults.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
-            this.columnHeader5});
+            this.columnHeader5,
+            this.ColumnQRZ});
             this.ListViewResults.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ListViewResults.FullRowSelect = true;
             this.ListViewResults.HideSelection = false;
-            this.ListViewResults.Location = new System.Drawing.Point(0, 51);
+            this.ListViewResults.Location = new System.Drawing.Point(0, 58);
+            this.ListViewResults.MultiSelect = false;
             this.ListViewResults.Name = "ListViewResults";
-            this.ListViewResults.Size = new System.Drawing.Size(499, 197);
+            this.ListViewResults.Size = new System.Drawing.Size(522, 164);
             this.ListViewResults.TabIndex = 13;
             this.ListViewResults.TabStop = false;
             this.ListViewResults.UseCompatibleStateImageBehavior = false;
             this.ListViewResults.View = System.Windows.Forms.View.Details;
+            this.ListViewResults.SelectedIndexChanged += new System.EventHandler(this.ListViewResults_SelectedIndexChanged);
             // 
             // columnHeader1
             // 
@@ -99,30 +104,33 @@
             // columnHeader5
             // 
             this.columnHeader5.Text = "Dxcc";
-            this.columnHeader5.Width = 100;
+            // 
+            // ColumnQRZ
+            // 
+            this.ColumnQRZ.Text = "QRZ";
             // 
             // CheckBoxQRZ
             // 
             this.CheckBoxQRZ.AutoSize = true;
-            this.CheckBoxQRZ.Location = new System.Drawing.Point(301, 19);
+            this.CheckBoxQRZ.Location = new System.Drawing.Point(197, 19);
             this.CheckBoxQRZ.Name = "CheckBoxQRZ";
-            this.CheckBoxQRZ.Size = new System.Drawing.Size(117, 19);
-            this.CheckBoxQRZ.TabIndex = 2;
-            this.CheckBoxQRZ.Text = "Add QRZ Lookup";
+            this.CheckBoxQRZ.Size = new System.Drawing.Size(76, 19);
+            this.CheckBoxQRZ.TabIndex = 1;
+            this.CheckBoxQRZ.Text = "QRZ.com";
             this.CheckBoxQRZ.UseVisualStyleBackColor = true;
             // 
             // CallLookupPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Gainsboro;
-            this.Controls.Add(this.CheckBoxQRZ);
+            this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Controls.Add(this.ListViewResults);
+            this.Controls.Add(this.CheckBoxQRZ);
             this.Controls.Add(this.TextBoxCallSign);
             this.Controls.Add(this.ButtonLookupCall);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "CallLookupPanel";
-            this.Size = new System.Drawing.Size(499, 248);
+            this.Size = new System.Drawing.Size(522, 222);
             this.Load += new System.EventHandler(this.CallLookupPanel_Load);
             this.VisibleChanged += new System.EventHandler(this.ButtonCallLookup_Click);
             this.ResumeLayout(false);
@@ -141,5 +149,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.CheckBox CheckBoxQRZ;
+        private System.Windows.Forms.ColumnHeader ColumnQRZ;
     }
 }

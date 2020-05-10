@@ -38,6 +38,7 @@ namespace W6OP
             TextBoxCallSign.Focus();
         }
 
+
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Enter)
@@ -58,6 +59,7 @@ namespace W6OP
             IEnumerable<CallSignInfo> hitCollection;
 
             ListViewResults.Items.Clear();
+            //ClearAllLabels();
 
             try
             {
@@ -85,8 +87,7 @@ namespace W6OP
                         var hitList = hitCollection.ToList();
                         foreach (CallSignInfo hit in hitList)
                         {
-                            var flags = string.Join(",", hit.CallSignFlags);
-                            UpdateListViewResults(hit.CallSign, hit.Kind, hit.Country, hit.Province, hit.DXCC.ToString(), flags);
+                            UpdateListViewResults(hit.CallSign, hit.Kind, hit.Country, hit.Province, hit.DXCC.ToString(), hit.IsQRZInformation, hit);
                         }
                     }
                 }
@@ -103,7 +104,7 @@ namespace W6OP
         /// </summary>
         /// <param name="call"></param>
         /// <param name="clear"></param>
-        private void UpdateListViewResults(string call, PrefixKind kind, string country, string province, string dxcc, string flags)
+        private void UpdateListViewResults(string call, PrefixKind kind, string country, string province, string dxcc, bool isQRZ, CallSignInfo hit)
         {
             if (!InvokeRequired)
             {
@@ -124,13 +125,22 @@ namespace W6OP
                 item.SubItems.Add(country);
                 item.SubItems.Add(province ?? "");
                 item.SubItems.Add(dxcc);
-                //item.SubItems.Add(flags);
+
+                if (isQRZ)
+                {
+                    item.SubItems.Add("QRZ");
+                    item.Tag = hit;
+                }
+                else
+                {
+                    item.SubItems.Add("");
+                }
+
                 ListViewResults.Items.Add(item);
-                Application.DoEvents();
             }
             else
             {
-                this.BeginInvoke(new Action<string, PrefixKind, string, string, string, string>(this.UpdateListViewResults), call, kind, country, province, dxcc, flags);
+                BeginInvoke(new Action<string, PrefixKind, string, string, string, bool, CallSignInfo>(this.UpdateListViewResults), call, kind, country, province, dxcc, isQRZ, hit);
                 return;
             }
         }
@@ -161,5 +171,25 @@ namespace W6OP
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListViewResults_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            QRZDetailForm detail;
+
+            if (ListViewResults.SelectedItems.Count > 0)
+            {
+                ListViewItem item = ListViewResults.SelectedItems[0];
+                if (item.Tag != null)
+                {
+                    detail = new QRZDetailForm((CallSignInfo)item.Tag);
+                    detail.StartPosition = FormStartPosition.CenterParent;
+                    detail.Show(this);
+                }
+            }
+        }
     } // end class
 }
