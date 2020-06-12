@@ -3,14 +3,13 @@ using System.ComponentModel;
 
 namespace W6OP
 {
+    public enum Units
+    {
+        Kilometers,
+        Miles
+    }
     public class Settings: Object
     {
-        //this setting is saved/restored and editable by user
-        //[DisplayName("Dock to Right")]
-        //[Description("Dock to the right side of the window")]
-        //[DefaultValue(true)]
-        //public bool DockToRight { get; set; } = true;
-
         [DisplayName("QRZ.com Logon Id")]
         [Description("Enter your QRZ logon id")]
         [DefaultValue("")]
@@ -21,5 +20,15 @@ namespace W6OP
         [Description("Enter your QRZ password")]
         [DefaultValue("")]
         public string QRZPassword { get; set; }
+
+        [DisplayName("Grid Square")]
+        [Description("Enter 6 character grid for your location")]
+        [DefaultValue("")]
+        public string Grid { get; set; }
+
+        [DisplayName("Display Units")]
+        [Description("Enter units miles/kilometers")]
+        [DefaultValue("Kilometers")]
+        public Units Unit { get; set; }
     }
 }

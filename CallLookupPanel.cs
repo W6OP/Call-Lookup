@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Unclassified.Util;
 using W6OP.CallParser;
 
 namespace W6OP
@@ -21,17 +23,26 @@ namespace W6OP
         // these must be initialized or GetSettings() fails
         public string QRZLogonId = "";
         public string QRZPassword = "";
+        public string Grid = "";
 
+        /// <summary>
+        /// Constuctor.
+        /// </summary>
         public CallLookupPanel()
         {
             InitializeComponent();
 
             PrefixFileParser = new PrefixFileParser();
             PrefixFileParser.ParsePrefixFile("");
-            CallLookUp = new CallLookUp(PrefixFileParser); 
+            CallLookUp = new CallLookUp(PrefixFileParser);
         }
 
 
+        /// <summary>
+        /// Initialization after window loads.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CallLookupPanel_Load(object sender, EventArgs e)
         {
             settings = (Settings)Plugin.Settings;
@@ -39,6 +50,12 @@ namespace W6OP
         }
 
 
+        /// <summary>
+        /// Captures the Enter key when in the Call Sign textbox.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="keyData"></param>
+        /// <returns></returns>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Enter)
@@ -50,16 +67,18 @@ namespace W6OP
         }
 
         /// <summary>
-        /// 
+        /// Look up a call sign.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ButtonCallLookup_Click(object sender, EventArgs e)
         {
             IEnumerable<CallSignInfo> hitCollection;
+            string heading;
+            string distance;
+            string grid = "";
 
             ListViewResults.Items.Clear();
-            //ClearAllLabels();
 
             try
             {
@@ -87,7 +106,18 @@ namespace W6OP
                         var hitList = hitCollection.ToList();
                         foreach (CallSignInfo hit in hitList)
                         {
-                            UpdateListViewResults(hit.CallSign, hit.Kind, hit.Country, hit.Province, hit.DXCC.ToString(), hit.IsQRZInformation, hit);
+                            if (settings.Grid != "")
+                            {
+                                grid = GetGridFromLatLong(hit.Latitude,hit.Longitude);
+                                heading = GetHeading(grid);
+                                distance = GetDistance(grid);
+                            } else
+                            {
+                                heading = "0";
+                                distance = "0";
+                            }
+
+                            UpdateListViewResults(hit, heading, distance, grid);
                         }
                     }
                 }
@@ -99,34 +129,83 @@ namespace W6OP
      
         }
 
+     
         /// <summary>
+        /// Get the heading from one grid to another.
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <returns></returns>
+        private string GetHeading(string destination)
+        {
+            string homeLocation = settings.Grid;
+            double azimuth = MaidenheadLocator.Azimuth(homeLocation.ToUpper(), destination.ToUpper());
+
+            return string.Format("{0:0.##}", azimuth);
+        }
+
+        /// <summary>
+        /// Get the distance from one grid to another.
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <returns></returns>
+        private string GetDistance(string destination)
+        {
+            string homeLocation = settings.Grid;
+            double distance = MaidenheadLocator.Distance(homeLocation.ToUpper(), destination.ToUpper());
+
+            if (settings.Unit == Units.Miles)
+            {
+                distance /= 1.6;
+            }
+
+            return string.Format("{0:0.##}", distance);
+        }
+
+        /// <summary>
+        /// Get the maidenhead grid form the latitude and longitude.
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns></returns>
+        private string GetGridFromLatLong(string latitude, string longitude)
+        {
+            double lat = Convert.ToDouble(latitude);
+            double lon = Convert.ToDouble(longitude);
+
+            string grid = MaidenheadLocator.LatLngToLocator(lat, lon);
+
+            return grid;
+        }
+
+        /// <summary>
+        /// Display the results in a ListView
         /// Prevent cross thread calls.
         /// </summary>
         /// <param name="call"></param>
         /// <param name="clear"></param>
-        private void UpdateListViewResults(string call, PrefixKind kind, string country, string province, string dxcc, bool isQRZ, CallSignInfo hit)
+        private void UpdateListViewResults(CallSignInfo hit, string heading, string distance, string grid)
         {
             if (!InvokeRequired)
             {
                 ListViewItem item;
 
-                if (kind == PrefixKind.DXCC)
+                if (hit.Kind == PrefixKind.DXCC)
                 {
-                    item = new ListViewItem(call);
+                    item = new ListViewItem(hit.CallSign);
                     item.BackColor = Color.Thistle;
                 }
                 else
                 {
-                    item = new ListViewItem(call);
+                    item = new ListViewItem(hit.CallSign);
                     item.BackColor = Color.LavenderBlush;
                 }
 
-                item.SubItems.Add(kind.ToString());
-                item.SubItems.Add(country);
-                item.SubItems.Add(province ?? "");
-                item.SubItems.Add(dxcc);
+                item.SubItems.Add(hit.Kind.ToString());
+                item.SubItems.Add(hit.Country);
+                item.SubItems.Add(hit.Province ?? "");
+                item.SubItems.Add(hit.DXCC.ToString());
 
-                if (isQRZ)
+                if (hit.IsQRZInformation)
                 {
                     item.SubItems.Add("QRZ");
                     item.Tag = hit;
@@ -136,11 +215,18 @@ namespace W6OP
                     item.SubItems.Add("");
                 }
 
+                //heading = String.Format("{0:0.##}", heading);
+                //distance = String.Format("{0:0.##}", distance);
+
+                item.SubItems.Add(heading);
+                item.SubItems.Add(distance);
+                item.SubItems.Add(grid);
+
                 ListViewResults.Items.Add(item);
             }
             else
             {
-                BeginInvoke(new Action<string, PrefixKind, string, string, string, bool, CallSignInfo>(this.UpdateListViewResults), call, kind, country, province, dxcc, isQRZ, hit);
+                BeginInvoke(new Action<CallSignInfo, string, string, string>(this.UpdateListViewResults), hit, heading, distance, grid);
                 return;
             }
         }

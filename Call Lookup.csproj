@@ -64,6 +64,7 @@
     <Compile Include="CallLookupPanel.Designer.cs">
       <DependentUpon>CallLookupPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="MaidenheadLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QRZDetailForm.cs">
       <SubType>Form</SubType>

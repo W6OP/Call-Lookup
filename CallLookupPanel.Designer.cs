@@ -38,6 +38,9 @@
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ColumnQRZ = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.CheckBoxQRZ = new System.Windows.Forms.CheckBox();
+            this.ColumnHeading = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ColumnDistance = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ColumnGrid = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // ButtonLookupCall
@@ -68,14 +71,17 @@
             this.columnHeader3,
             this.columnHeader4,
             this.columnHeader5,
-            this.ColumnQRZ});
+            this.ColumnQRZ,
+            this.ColumnHeading,
+            this.ColumnDistance,
+            this.ColumnGrid});
             this.ListViewResults.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ListViewResults.FullRowSelect = true;
             this.ListViewResults.HideSelection = false;
             this.ListViewResults.Location = new System.Drawing.Point(0, 58);
             this.ListViewResults.MultiSelect = false;
             this.ListViewResults.Name = "ListViewResults";
-            this.ListViewResults.Size = new System.Drawing.Size(522, 164);
+            this.ListViewResults.Size = new System.Drawing.Size(783, 164);
             this.ListViewResults.TabIndex = 13;
             this.ListViewResults.TabStop = false;
             this.ListViewResults.UseCompatibleStateImageBehavior = false;
@@ -119,6 +125,20 @@
             this.CheckBoxQRZ.Text = "QRZ.com";
             this.CheckBoxQRZ.UseVisualStyleBackColor = true;
             // 
+            // ColumnHeading
+            // 
+            this.ColumnHeading.Text = "Heading";
+            this.ColumnHeading.Width = 100;
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.Text = "Distance";
+            this.ColumnDistance.Width = 100;
+            // 
+            // ColumnGrid
+            // 
+            this.ColumnGrid.Text = "Grid";
+            // 
             // CallLookupPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -130,7 +150,7 @@
             this.Controls.Add(this.ButtonLookupCall);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "CallLookupPanel";
-            this.Size = new System.Drawing.Size(522, 222);
+            this.Size = new System.Drawing.Size(783, 222);
             this.Load += new System.EventHandler(this.CallLookupPanel_Load);
             this.VisibleChanged += new System.EventHandler(this.ButtonCallLookup_Click);
             this.ResumeLayout(false);
@@ -150,5 +170,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.CheckBox CheckBoxQRZ;
         private System.Windows.Forms.ColumnHeader ColumnQRZ;
+        private System.Windows.Forms.ColumnHeader ColumnHeading;
+        private System.Windows.Forms.ColumnHeader ColumnDistance;
+        private System.Windows.Forms.ColumnHeader ColumnGrid;
     }
 }
