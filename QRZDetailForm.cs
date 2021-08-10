@@ -6,11 +6,11 @@ namespace W6OP
 {
     public partial class QRZDetailForm : Form
     {
-        private CallSignInfo hit;
+        private readonly Hit hit;
 
-        public QRZDetailForm(CallSignInfo callSignInfo)
+        public QRZDetailForm(Hit prefixData)
         {
-            hit = callSignInfo;
+            hit = prefixData;
             InitializeComponent();
         }
 

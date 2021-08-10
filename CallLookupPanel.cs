@@ -25,6 +25,8 @@ namespace W6OP
         public string QRZPassword = "";
         public string Grid = "";
 
+        private bool isInitialized = false;
+
         /// <summary>
         /// Constuctor.
         /// </summary>
@@ -47,6 +49,7 @@ namespace W6OP
         {
             settings = (Settings)Plugin.Settings;
             TextBoxCallSign.Focus();
+            isInitialized = true;
         }
 
 
@@ -73,11 +76,19 @@ namespace W6OP
         /// <param name="e"></param>
         private void ButtonCallLookup_Click(object sender, EventArgs e)
         {
-            IEnumerable<CallSignInfo> hitCollection;
+            IEnumerable<Hit> hitCollection;
             string heading;
             string distance;
             string grid = "";
+            string homeLocation;
 
+            // why does this get hit before control is loaded???
+            if (!isInitialized)
+            {
+                return;
+            }
+
+            homeLocation = settings.Grid;
             ListViewResults.Items.Clear();
 
             try
@@ -104,13 +115,13 @@ namespace W6OP
                     if (hitCollection != null)
                     {
                         var hitList = hitCollection.ToList();
-                        foreach (CallSignInfo hit in hitList)
+                        foreach (Hit hit in hitList)
                         {
-                            if (settings.Grid != "")
+                            if (!string.IsNullOrEmpty(homeLocation))
                             {
                                 grid = GetGridFromLatLong(hit.Latitude,hit.Longitude);
-                                heading = GetHeading(grid);
-                                distance = GetDistance(grid);
+                                heading = GetHeading(homeLocation, grid);
+                                distance = GetDistance(homeLocation, grid);
                             } else
                             {
                                 heading = "0";
@@ -135,9 +146,8 @@ namespace W6OP
         /// </summary>
         /// <param name="destination"></param>
         /// <returns></returns>
-        private string GetHeading(string destination)
+        private string GetHeading(string homeLocation, string destination)
         {
-            string homeLocation = settings.Grid;
             double azimuth = MaidenheadLocator.Azimuth(homeLocation.ToUpper(), destination.ToUpper());
 
             return string.Format("{0:0.##}", azimuth);
@@ -148,9 +158,8 @@ namespace W6OP
         /// </summary>
         /// <param name="destination"></param>
         /// <returns></returns>
-        private string GetDistance(string destination)
+        private string GetDistance(string homeLocation, string destination)
         {
-            string homeLocation = settings.Grid;
             double distance = MaidenheadLocator.Distance(homeLocation.ToUpper(), destination.ToUpper());
 
             if (settings.Unit == Units.Miles)
@@ -183,7 +192,7 @@ namespace W6OP
         /// </summary>
         /// <param name="call"></param>
         /// <param name="clear"></param>
-        private void UpdateListViewResults(CallSignInfo hit, string heading, string distance, string grid)
+        private void UpdateListViewResults(Hit hit, string heading, string distance, string grid)
         {
             if (!InvokeRequired)
             {
@@ -226,7 +235,7 @@ namespace W6OP
             }
             else
             {
-                BeginInvoke(new Action<CallSignInfo, string, string, string>(this.UpdateListViewResults), hit, heading, distance, grid);
+                BeginInvoke(new Action<Hit, string, string, string>(UpdateListViewResults), hit, heading, distance, grid);
                 return;
             }
         }
@@ -271,8 +280,10 @@ namespace W6OP
                 ListViewItem item = ListViewResults.SelectedItems[0];
                 if (item.Tag != null)
                 {
-                    detail = new QRZDetailForm((CallSignInfo)item.Tag);
-                    detail.StartPosition = FormStartPosition.CenterParent;
+                    detail = new QRZDetailForm((Hit)item.Tag)
+                    {
+                        StartPosition = FormStartPosition.CenterParent
+                    };
                     detail.Show(this);
                 }
             }

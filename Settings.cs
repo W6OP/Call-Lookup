@@ -8,7 +8,7 @@ namespace W6OP
         Kilometers,
         Miles
     }
-    public class Settings: Object
+    public class Settings : object
     {
         [DisplayName("QRZ.com Logon Id")]
         [Description("Enter your QRZ logon id")]
