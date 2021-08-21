@@ -27,24 +27,30 @@ namespace Unclassified.Util
 			locator = locator.Trim().ToUpper();
 			if (Regex.IsMatch(locator, "^[A-R]{2}[0-9]{2}$"))
 			{
-				LatLng ll = new LatLng();
-				ll.Long = (locator[0] - 'A') * 20 + (locator[2] - '0' + 0.5) * 2 - 180;
-				ll.Lat = (locator[1] - 'A') * 10 + (locator[3] - '0' + 0.5) - 90;
-				return ll;
-			}
+                LatLng ll = new LatLng
+                {
+                    Long = (locator[0] - 'A') * 20 + (locator[2] - '0' + 0.5) * 2 - 180,
+                    Lat = (locator[1] - 'A') * 10 + (locator[3] - '0' + 0.5) - 90
+                };
+                return ll;
+			}                    
 			else if (Regex.IsMatch(locator, "^[A-R]{2}[0-9]{2}[A-X]{2}$"))
 			{
-				LatLng ll = new LatLng();
-				ll.Long = (locator[0] - 'A') * 20 + (locator[2] - '0') * 2 + (locator[4] - 'A' + 0.5) / 12 - 180;
-				ll.Lat = (locator[1] - 'A') * 10 + (locator[3] - '0') + (locator[5] - 'A' + 0.5) / 24 - 90;
-				return ll;
+                LatLng ll = new LatLng
+                {
+                    Long = (locator[0] - 'A') * 20 + (locator[2] - '0') * 2 + (locator[4] - 'A' + 0.5) / 12 - 180,
+                    Lat = (locator[1] - 'A') * 10 + (locator[3] - '0') + (locator[5] - 'A' + 0.5) / 24 - 90
+                };
+                return ll;
 			}
 			else if (Regex.IsMatch(locator, "^[A-R]{2}[0-9]{2}[A-X]{2}[0-9]{2}$"))
 			{
-				LatLng ll = new LatLng();
-				ll.Long = (locator[0] - 'A') * 20 + (locator[2] - '0') * 2 + (locator[4] - 'A' + 0.0) / 12 + (locator[6] - '0' + 0.5) / 120 - 180;
-				ll.Lat = (locator[1] - 'A') * 10 + (locator[3] - '0') + (locator[5] - 'A' + 0.0) / 24 + (locator[7] - '0' + 0.5) / 240 - 90;
-				return ll;
+                LatLng ll = new LatLng
+                {
+                    Long = (locator[0] - 'A') * 20 + (locator[2] - '0') * 2 + (locator[4] - 'A' + 0.0) / 12 + (locator[6] - '0' + 0.5) / 120 - 180,
+                    Lat = (locator[1] - 'A') * 10 + (locator[3] - '0') + (locator[5] - 'A' + 0.0) / 24 + (locator[7] - '0' + 0.5) / 240 - 90
+                };
+                return ll;
 			}
 			else if (Regex.IsMatch(locator, "^[A-R]{2}[0-9]{2}[A-X]{2}[0-9]{2}[A-X]{2}$"))
 			{

@@ -72,7 +72,6 @@
     <Compile Include="QRZDetailForm.Designer.cs">
       <DependentUpon>QRZDetailForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="QRZLookup.cs" />
     <Compile Include="Settings.cs" />
     <EmbeddedResource Include="CallLookupPanel.resx">
       <DependentUpon>CallLookupPanel.cs</DependentUpon>

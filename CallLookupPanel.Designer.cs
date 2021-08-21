@@ -37,14 +37,15 @@
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ColumnQRZ = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.CheckBoxQRZ = new System.Windows.Forms.CheckBox();
             this.ColumnHeading = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ColumnDistance = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ColumnGrid = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.CheckBoxQRZ = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // ButtonLookupCall
             // 
+            this.ButtonLookupCall.Enabled = false;
             this.ButtonLookupCall.Location = new System.Drawing.Point(279, 16);
             this.ButtonLookupCall.Name = "ButtonLookupCall";
             this.ButtonLookupCall.Size = new System.Drawing.Size(87, 23);
@@ -60,6 +61,7 @@
             this.TextBoxCallSign.Name = "TextBoxCallSign";
             this.TextBoxCallSign.Size = new System.Drawing.Size(157, 23);
             this.TextBoxCallSign.TabIndex = 0;
+            this.TextBoxCallSign.Enter += new System.EventHandler(this.TextBoxCallSign_Enter);
             this.TextBoxCallSign.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxCallSign_KeyDown);
             // 
             // ListViewResults
@@ -115,16 +117,6 @@
             // 
             this.ColumnQRZ.Text = "QRZ";
             // 
-            // CheckBoxQRZ
-            // 
-            this.CheckBoxQRZ.AutoSize = true;
-            this.CheckBoxQRZ.Location = new System.Drawing.Point(197, 19);
-            this.CheckBoxQRZ.Name = "CheckBoxQRZ";
-            this.CheckBoxQRZ.Size = new System.Drawing.Size(76, 19);
-            this.CheckBoxQRZ.TabIndex = 1;
-            this.CheckBoxQRZ.Text = "QRZ.com";
-            this.CheckBoxQRZ.UseVisualStyleBackColor = true;
-            // 
             // ColumnHeading
             // 
             this.ColumnHeading.Text = "Heading";
@@ -138,6 +130,17 @@
             // ColumnGrid
             // 
             this.ColumnGrid.Text = "Grid";
+            // 
+            // CheckBoxQRZ
+            // 
+            this.CheckBoxQRZ.AutoSize = true;
+            this.CheckBoxQRZ.Location = new System.Drawing.Point(197, 19);
+            this.CheckBoxQRZ.Name = "CheckBoxQRZ";
+            this.CheckBoxQRZ.Size = new System.Drawing.Size(76, 19);
+            this.CheckBoxQRZ.TabIndex = 1;
+            this.CheckBoxQRZ.Text = "QRZ.com";
+            this.CheckBoxQRZ.UseVisualStyleBackColor = true;
+            this.CheckBoxQRZ.CheckedChanged += new System.EventHandler(this.CheckBoxQRZ_CheckedChanged);
             // 
             // CallLookupPanel
             // 
@@ -153,6 +156,7 @@
             this.Size = new System.Drawing.Size(783, 222);
             this.Load += new System.EventHandler(this.CallLookupPanel_Load);
             this.VisibleChanged += new System.EventHandler(this.ButtonCallLookup_Click);
+            this.Leave += new System.EventHandler(this.CallLookupPanel_Leave);
             this.ResumeLayout(false);
             this.PerformLayout();
 

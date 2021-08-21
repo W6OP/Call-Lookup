@@ -15,7 +15,7 @@ namespace W6OP
 
         #region iPlugin Implementation
 
-        public string Name => "W6OP Call Lookup";
+        public string Name => "Call Lookup";
 
         public string Author => "W6OP";
 

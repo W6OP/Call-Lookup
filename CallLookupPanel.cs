@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Unclassified.Util;
 using W6OP.CallParser;
@@ -25,7 +23,9 @@ namespace W6OP
         public string QRZPassword = "";
         public string Grid = "";
 
-        private bool isInitialized = false;
+        // needed because the button clicks on control closing
+        private string LastCallLookedUp = "";
+
 
         /// <summary>
         /// Constuctor.
@@ -49,9 +49,7 @@ namespace W6OP
         {
             settings = (Settings)Plugin.Settings;
             TextBoxCallSign.Focus();
-            isInitialized = true;
         }
-
 
         /// <summary>
         /// Captures the Enter key when in the Call Sign textbox.
@@ -83,18 +81,19 @@ namespace W6OP
             string homeLocation;
 
             // why does this get hit before control is loaded???
-            if (!isInitialized)
+            if (!ButtonLookupCall.Enabled)
             {
                 return;
             }
 
-            homeLocation = settings.Grid;
-            ListViewResults.Items.Clear();
-
             try
             {
-                if (TextBoxCallSign.Text != "")
+                if (!string.IsNullOrEmpty(TextBoxCallSign.Text) && TextBoxCallSign.Text != LastCallLookedUp) 
                 {
+                    homeLocation = settings.Grid;
+                    ListViewResults.Items.Clear();
+
+                    LastCallLookedUp = TextBoxCallSign.Text;
                     if (CheckBoxQRZ.Checked)
                     {
                         if (!string.IsNullOrEmpty(settings.QRZLogonId) && !string.IsNullOrEmpty(settings.QRZLogonId))
@@ -287,6 +286,21 @@ namespace W6OP
                     detail.Show(this);
                 }
             }
+        }
+
+        private void CallLookupPanel_Leave(object sender, EventArgs e)
+        {
+            ButtonLookupCall.Enabled = false;
+        }
+
+        private void TextBoxCallSign_Enter(object sender, EventArgs e)
+        {
+            ButtonLookupCall.Enabled = true;
+        }
+
+        private void CheckBoxQRZ_CheckedChanged(object sender, EventArgs e)
+        {
+            LastCallLookedUp = ""; 
         }
     } // end class
 }

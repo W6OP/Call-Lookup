@@ -39,8 +39,16 @@ namespace W6OP
             LabelLatitude.Text = hit.Latitude;
             LabelLongitude.Text = hit.Longitude;
             LabelGrid.Text = hit.Grid;
-            LabelCQZone.Text = "CQ Zone: " + hit.CQ.First().ToString();
-            LabelITUZone.Text = "ITU Zone: " + hit.ITU.First().ToString();
+
+            if (hit.CQ.Count > 0)
+            {
+                LabelCQZone.Text = "CQ Zone: " + hit.CQ.First().ToString();
+            }
+
+            if (hit.ITU.Count > 0)
+            {
+                LabelITUZone.Text = "ITU Zone: " + hit.ITU.First().ToString();
+            }
 
             LabelLotw.Text = hit.LotW ? "LoTW: Yes" : "LoTW: No";
         }
