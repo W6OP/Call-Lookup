@@ -74,7 +74,7 @@ namespace W6OP
         /// <param name="e"></param>
         private void ButtonCallLookup_Click(object sender, EventArgs e)
         {
-            IEnumerable<Hit> hitCollection;
+            IEnumerable<Hit> hitCollection = new List<Hit>();
             string heading;
             string distance;
             string grid = "";
@@ -98,7 +98,16 @@ namespace W6OP
                     {
                         if (!string.IsNullOrEmpty(settings.QRZLogonId) && !string.IsNullOrEmpty(settings.QRZLogonId))
                         {
-                            hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text, settings.QRZLogonId, settings.QRZPassword);
+                            try
+                            {
+                                hitCollection = CallLookUp.LookUpCall(TextBoxCallSign.Text, settings.QRZLogonId, settings.QRZPassword);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("There has been an error querying QRZ. \n" +
+                                    "Do you have an XML Logbook subscription? \n   " + ex.Message, "QRZ Lookup Failure", 
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                         else
                         {
